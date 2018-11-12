@@ -55,7 +55,7 @@ static int JPy_InitThreads = 0;
 #define JPy_GIL_AWARE
 
 #ifdef JPy_GIL_AWARE
-    #define JPy_BEGIN_GIL_STATE  { PyGILState_STATE gilState; if (!JPy_InitThreads) {JPy_InitThreads = 1; PyEval_InitThreads(); PyEval_SaveThread(); } gilState = PyGILState_Ensure();
+    #define JPy_BEGIN_GIL_STATE  { PyGILState_STATE gilState; if (!JPy_InitThreads) {JPy_InitThreads = 1; if (!PyEval_ThreadsInitialized()) { PyEval_InitThreads(); PyEval_SaveThread(); } } gilState = PyGILState_Ensure();
     #define JPy_END_GIL_STATE    PyGILState_Release(gilState); }
 #else
     #define JPy_BEGIN_GIL_STATE
