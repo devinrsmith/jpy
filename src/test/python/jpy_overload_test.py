@@ -6,6 +6,7 @@ import jpyutil
 jpyutil.init_jvm(jvm_maxmem='512M', jvm_classpath=['target/test-classes'])
 import jpy
 
+import array
 
 class TestConstructorOverloads(unittest.TestCase):
     def setUp(self):
@@ -104,6 +105,24 @@ class TestMethodOverloads(unittest.TestCase):
         fixture = self.Fixture()
         self.assertEqual(fixture.join2(1, 2, "c", "d"), 'Integer(1),Integer(2),String(c),String(d)')
         self.assertEqual(fixture.join2(1.1, 2, "c", "d"), 'Double(1.1),Integer(2),String(c),String(d)')
+
+    def test_java_arrays(self):
+        fixture = self.Fixture()
+
+        ints = jpy.array('int', [1, 2, 3])
+        longs = jpy.array('long', [2L, 3L, 4L])
+
+        self.assertEqual(fixture.joinArray(ints), 'int[](1,2,3)')
+        self.assertEqual(fixture.joinArray(longs), 'long[](2,3,4)')
+
+    def test_arrays(self):
+        fixture = self.Fixture()
+
+        ints = array.array('i', [1, 2, 3])
+        longs = array.array('l', [2L, 3L, 4L])
+
+        self.assertEqual(fixture.joinArray(ints), 'int[](1,2,3)')
+        self.assertEqual(fixture.joinArray(longs), 'long[](2,3,4)')
 
 class TestVarArgs(unittest.TestCase):
     def setUp(self):

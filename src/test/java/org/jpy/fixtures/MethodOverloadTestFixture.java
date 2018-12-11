@@ -73,6 +73,16 @@ public class MethodOverloadTestFixture {
     }
 
     //////////////////////////////////////////////
+
+    public String joinArray(int[] a) {
+        return stringifyArgs(new Object[] { a });
+    }
+
+    public String joinArray(long[] a) {
+        return stringifyArgs(new Object[] { a });
+    }
+
+    //////////////////////////////////////////////
     public String join2(Comparable a, int b, String c, String d) {
         return stringifyArgs(a, b, c, d);
     }
