@@ -13,6 +13,7 @@ RUN set -eux; \
 
 ENV JAVA_HOME=/usr/lib/jvm/zulu8-ca-arm64
 ENV JPY_LOG_LEVEL=DEBUG
+ENV CI=true
 
 COPY . .
 
