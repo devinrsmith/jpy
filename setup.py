@@ -107,7 +107,8 @@ if jdk_home_dir is None:
 log.info('Building a %s-bit library for a %s system with JDK at %s' % (
     '64' if jpyutil.PYTHON_64BIT else '32', platform.system(), jdk_home_dir))
 
-jvm_dll_file = jpyutil.find_jvm_dll_file(jdk_home_dir)
+#jvm_dll_file = jpyutil.find_jvm_dll_file(jdk_home_dir)
+jvm_dll_file = '/usr/lib/jvm/zulu8-ca-arm64/jre/lib/aarch64/server/libjvm.so'
 if not jvm_dll_file:
     log.error('Error: Cannot find any JVM shared library')
     exit(1)
