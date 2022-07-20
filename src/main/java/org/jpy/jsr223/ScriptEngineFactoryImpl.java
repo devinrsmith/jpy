@@ -43,6 +43,8 @@ public class ScriptEngineFactoryImpl implements ScriptEngineFactory {
     public static final String EXTRA_PATHS_KEY = ScriptEngineFactoryImpl.class.getName() + ".extraPaths";
 
     private final Map<String, Object> parameters;
+
+    // Double-checked locking requires volatile
     private volatile ScriptEngineImpl scriptEngine;
 
     public ScriptEngineFactoryImpl() {
@@ -245,9 +247,11 @@ public class ScriptEngineFactoryImpl implements ScriptEngineFactory {
      */
     @Override
     public ScriptEngine getScriptEngine() {
-        if (scriptEngine == null) {
+        // Using local reference so the fast-path involves a single volatile read
+        ScriptEngineImpl ref;
+        if ((ref = scriptEngine) == null) {
             synchronized (this) {
-                if (scriptEngine == null) {
+                if ((ref = scriptEngine) == null) {
                     String pyLib = System.getProperty(PYTHON_LIB_KEY);
                     if (pyLib == null) {
                         throw new IllegalArgumentException(String.format("Must specify '%s'", PYTHON_LIB_KEY));
@@ -263,10 +267,11 @@ public class ScriptEngineFactoryImpl implements ScriptEngineFactory {
                     String[] extraPaths = System.getProperty(EXTRA_PATHS_KEY, "").split(File.pathSeparator);
                     PyLibInitializer.initPyLib(pyLib, jpyLib, jdlLib);
                     PyLib.startPython(extraPaths);
-                    scriptEngine = new ScriptEngineImpl(this);
+                    ref = new ScriptEngineImpl(this);
+                    scriptEngine = ref;
                 }
             }
         }
-        return scriptEngine;
+        return ref;
     }
 }
