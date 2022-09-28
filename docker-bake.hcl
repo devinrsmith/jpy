@@ -3,7 +3,8 @@ group "default" {
         "python-36-linux",
         "python-37-linux",
         "python-38-linux",
-        "python-39-linux"
+        "python-39-linux",
+        "python-310-linux"
     ]
 }
 
@@ -48,3 +49,11 @@ target "python-39-linux" {
     platforms = [ "linux/amd64", "linux/arm64/v8" ]
 }
 
+target "python-310-linux" {
+    inherits = [ "linux" ]
+    tags = [ "python-310-linux" ]
+    args = {
+        PYTHON_TAG = "3.10"
+    }
+    platforms = [ "linux/amd64", "linux/arm64/v8" ]
+}
